@@ -1,16 +1,17 @@
 from flask_mail import Message
-
 from app import mail
 
 
 def send_email(subject, recipients, body=None, html=None):
 
-    if not recipients:
-        return
+    print("INSIDE SEND EMAIL")
+
+    # TEMPORARY
+    return
 
     msg = Message(
         subject=subject,
-        recipients=recipients,
+        recipients=recipients
     )
 
     if body:
@@ -20,5 +21,3 @@ def send_email(subject, recipients, body=None, html=None):
         msg.html = html
 
     mail.send(msg)
-
-    print("✅ Email sent successfully.")
