@@ -1,0 +1,7 @@
+STATUS_OPEN = "Open"
+STATUS_CLOSED = "Closed"
+
+ALL_STATUS = [
+    STATUS_OPEN,
+    STATUS_CLOSED,
+]

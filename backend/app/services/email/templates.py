@@ -1,0 +1,243 @@
+def ncr_created_template(ncr, image_urls):
+
+    images_html = ""
+
+    if image_urls:
+        for i, url in enumerate(image_urls, start=1):
+            images_html += f"""
+            <div style="
+                margin-bottom:30px;
+                text-align:center;
+                border:1px solid #dddddd;
+                border-radius:10px;
+                padding:15px;
+                background:#fafafa;
+            ">
+
+                <h4 style="margin-top:0;color:#d97706;">
+                    Attachment {i}
+                </h4>
+
+                <img
+                    src="{url}"
+                    style="
+                        width:100%;
+                        max-width:650px;
+                        border-radius:10px;
+                        border:2px solid #d1d5db;
+                        box-shadow:0px 3px 8px rgba(0,0,0,.15);
+                    "
+                >
+
+                <br><br>
+
+                <a
+                    href="{url}"
+                    target="_blank"
+                    style="
+                        color:#2563eb;
+                        text-decoration:none;
+                        font-weight:bold;
+                    "
+                >
+                    View Full Resolution
+                </a>
+
+            </div>
+            """
+    else:
+
+        images_html = """
+        <p style="color:#777;">
+            No attachments were uploaded.
+        </p>
+        """
+
+    return f"""
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+</head>
+
+<body style="
+margin:0;
+padding:30px;
+background:#f3f4f6;
+font-family:Arial,Helvetica,sans-serif;
+">
+
+<div style="
+max-width:850px;
+margin:auto;
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,.12);
+">
+
+<!-- HEADER -->
+
+<div style="
+background:#d97706;
+color:white;
+padding:25px;
+text-align:center;
+">
+
+<h2 style="margin:0;">
+🟠 INTERNAL NCR RAISED
+</h2>
+
+<p style="
+margin-top:10px;
+font-size:15px;
+">
+
+A new Internal NCR has been raised and requires your attention.
+
+</p>
+
+</div>
+
+
+<div style="padding:30px;">
+
+<h3 style="margin-top:0;">
+NCR Details
+</h3>
+
+<table
+style="
+width:100%;
+border-collapse:collapse;
+font-size:15px;
+">
+
+<tr style="background:#f9fafb;">
+<td style="padding:12px;border:1px solid #ddd;"><b>NCR Number</b></td>
+<td style="padding:12px;border:1px solid #ddd;">
+<b style="color:#d97706;">{ncr.ncr_number}</b>
+</td>
+</tr>
+
+<tr>
+<td style="padding:12px;border:1px solid #ddd;"><b>Project</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.project_name}</td>
+</tr>
+
+<tr style="background:#f9fafb;">
+<td style="padding:12px;border:1px solid #ddd;"><b>Drawing Number</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.drawing_number or "-"}</td>
+</tr>
+
+<tr>
+<td style="padding:12px;border:1px solid #ddd;"><b>Plant</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.plant}</td>
+</tr>
+
+<tr style="background:#f9fafb;">
+<td style="padding:12px;border:1px solid #ddd;"><b>Bay</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.bay}</td>
+</tr>
+
+<tr>
+<td style="padding:12px;border:1px solid #ddd;"><b>Stage</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.stage}</td>
+</tr>
+
+<tr style="background:#f9fafb;">
+<td style="padding:12px;border:1px solid #ddd;"><b>Issue Date</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.issue_date}</td>
+</tr>
+
+<tr>
+<td style="padding:12px;border:1px solid #ddd;"><b>Target Closing Date</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.target_closing_date}</td>
+</tr>
+
+<tr style="background:#f9fafb;">
+<td style="padding:12px;border:1px solid #ddd;"><b>Raised By</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.initiator_name}</td>
+</tr>
+
+<tr>
+<td style="padding:12px;border:1px solid #ddd;">
+<b>NCR Closure Owner</b>
+</td>
+
+<td style="padding:12px;border:1px solid #ddd;">
+<b>{ncr.responsible_person}</b>
+</td>
+</tr>
+
+</table>
+
+
+<h3 style="
+margin-top:35px;
+">
+NCR Description
+</h3>
+
+<div style="
+background:#fff7ed;
+border-left:6px solid #d97706;
+padding:18px;
+border-radius:8px;
+line-height:1.7;
+">
+
+{ncr.ncr_description}
+
+</div>
+
+
+<h3 style="
+margin-top:35px;
+">
+Photo Evidence
+</h3>
+
+{images_html}
+
+<hr style="margin-top:35px;">
+
+<p style="
+font-size:15px;
+">
+
+Please review this NCR and take the necessary corrective action before the target closing date.
+
+</p>
+
+</div>
+
+
+<div style="
+background:#f9fafb;
+padding:20px;
+text-align:center;
+color:#666;
+font-size:13px;
+">
+
+This is an automatically generated email from the
+<b>Internal NCR Management System</b>.
+
+<br><br>
+
+Please do not reply to this email.
+
+</div>
+
+</div>
+
+</body>
+
+</html>
+"""
