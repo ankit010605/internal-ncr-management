@@ -124,7 +124,16 @@ class InternalNCR(db.Model):
         nullable=False,
         default=STATUS_OPEN
     )
+        # Closure Details
+    closed_by = db.Column(
+        db.String(150),
+        nullable=True
+    )
 
+    closed_date = db.Column(
+        db.DateTime,
+        nullable=True
+    )
     # Soft Delete
     is_active = db.Column(
         db.Boolean,
@@ -181,6 +190,8 @@ class InternalNCR(db.Model):
             "root_cause_analysis": self.root_cause_analysis,
             "corrective_preventive_action": self.corrective_preventive_action,
             "status": self.status,
+            "closed_by": self.closed_by,
+            "closed_date": self.closed_date.isoformat() if self.closed_date else None,
             "is_active": self.is_active,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,

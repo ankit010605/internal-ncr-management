@@ -241,3 +241,214 @@ Please do not reply to this email.
 
 </html>
 """
+def ncr_closed_template(ncr, image_urls):
+
+    images_html = ""
+
+    for i, url in enumerate(image_urls, start=1):
+
+        images_html += f"""
+        <div style="margin-bottom:20px;">
+            <p style="font-weight:bold;">
+                Attachment {i}
+            </p>
+
+            <img
+                src="{url}"
+                style="
+                    max-width:600px;
+                    width:100%;
+                    border:1px solid #ccc;
+                    border-radius:8px;
+                "
+            >
+
+            <br>
+
+            <a href="{url}" target="_blank">
+                View Full Image
+            </a>
+        </div>
+        """
+
+    return f"""
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body style="
+font-family:Arial,Helvetica,sans-serif;
+background:#f5f5f5;
+padding:30px;
+">
+
+<div style="
+background:white;
+max-width:750px;
+margin:auto;
+padding:30px;
+border-radius:10px;
+">
+
+<div style="
+background:#16a34a;
+padding:18px;
+border-radius:8px;
+color:white;
+text-align:center;
+">
+
+<h2 style="margin:0;">
+🟢 INTERNAL NCR CLOSED
+</h2>
+
+<p style="
+margin-top:10px;
+font-size:18px;
+font-weight:bold;
+">
+NCR No: {ncr.ncr_number}
+</p>
+
+<p>
+This Internal NCR has been successfully closed.
+</p>
+
+</div>
+
+<hr>
+
+<h3>Closure Summary</h3>
+
+<table style="width:100%;border-collapse:collapse;">
+
+<tr>
+<td><b>Status</b></td>
+<td>🟢 CLOSED</td>
+</tr>
+
+<tr>
+<td><b>Closed By</b></td>
+<td>{ncr.closed_by or "-"}</td>
+</tr>
+
+<tr>
+<td><b>Closed Date</b></td>
+<td>{ncr.closed_date}</td>
+</tr>
+
+<tr>
+<td><b>Target Closing Date</b></td>
+<td>{ncr.target_closing_date}</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h3>NCR Details</h3>
+
+<table style="width:100%;border-collapse:collapse;">
+
+<tr>
+<td><b>Project</b></td>
+<td>{ncr.project_name}</td>
+</tr>
+
+<tr>
+<td><b>Drawing Number</b></td>
+<td>{ncr.drawing_number or "-"}</td>
+</tr>
+
+<tr>
+<td><b>Plant</b></td>
+<td>{ncr.plant}</td>
+</tr>
+
+<tr>
+<td><b>Bay</b></td>
+<td>{ncr.bay}</td>
+</tr>
+
+<tr>
+<td><b>Stage</b></td>
+<td>{ncr.stage}</td>
+</tr>
+
+<tr>
+<td><b>Issue Date</b></td>
+<td>{ncr.issue_date}</td>
+</tr>
+
+<tr>
+<td><b>Raised By</b></td>
+<td>{ncr.initiator_name}</td>
+</tr>
+
+<tr>
+<td><b>Responsible Person</b></td>
+<td>{ncr.responsible_person}</td>
+</tr>
+
+</table>
+
+<hr>
+
+<h3>NCR Description</h3>
+
+<p>
+{ncr.ncr_description}
+</p>
+
+<hr>
+
+<h3>Root Cause Analysis</h3>
+
+<p>
+{ncr.root_cause_analysis or "-"}
+</p>
+
+<hr>
+
+<h3>Corrective & Preventive Action</h3>
+
+<p>
+{ncr.corrective_preventive_action or "-"}
+</p>
+
+<hr>
+
+<h3>Photo Evidence</h3>
+
+{images_html}
+
+<hr>
+
+<p>
+
+This Internal NCR has been successfully closed.
+
+</p>
+
+<p style="color:gray;font-size:13px;">
+
+This is an automatically generated email from the
+<b>Internal NCR Management System</b>.
+
+<br><br>
+
+Please do not reply to this email.
+
+</p>
+
+</div>
+
+</body>
+
+</html>
+"""
+    

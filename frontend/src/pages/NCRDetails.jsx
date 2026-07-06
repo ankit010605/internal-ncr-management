@@ -6,6 +6,7 @@ import {
   Typography,
   Paper,
   Grid,
+  TextField,
   Divider,
   Box,
   Button,
@@ -47,6 +48,13 @@ export default function NCRDetails() {
 
   const [ncr, setNcr] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [closeDialogOpen, setCloseDialogOpen] = useState(false);
+
+  const [closeForm, setCloseForm] = useState({
+    closed_by: "",
+    root_cause_analysis: "",
+    corrective_preventive_action: "",
+});
 
   useEffect(() => {
     loadNCR();
@@ -61,22 +69,40 @@ export default function NCRDetails() {
     }
   };
   const handleCloseNCR = async () => {
+
     try {
-
-      const res = await api.put(`/ncr/${id}/close`);
-
+  
+      const res = await api.put(
+  
+        `/ncr/${id}/close`,
+  
+        closeForm
+  
+      );
+  
       alert(res.data.message);
-
-      // Reload the latest NCR data
+  
+      setCloseDialogOpen(false);
+  
+      setCloseForm({
+        closed_by: "",
+        root_cause_analysis: "",
+        corrective_preventive_action: "",
+      });
+  
       loadNCR();
-
+  
     } catch (err) {
-
+  
       console.log(err);
-
-      alert("Failed to close NCR.");
-
+  
+      alert(
+        err.response?.data?.message ||
+        "Failed to close NCR."
+      );
+  
     }
+  
   };
 
   if (!ncr)
@@ -144,7 +170,7 @@ export default function NCRDetails() {
             <Button
               variant="contained"
               startIcon={<CheckCircleOutlinedIcon />}
-              onClick={handleCloseNCR}
+              onClick={() => setCloseDialogOpen(true)}
               sx={{
                 borderRadius: "8px",
                 bgcolor: "#16A34A",
@@ -289,7 +315,95 @@ export default function NCRDetails() {
           )}
         </Box>
       </Dialog>
+      <Dialog
+  open={closeDialogOpen}
+  onClose={() => setCloseDialogOpen(false)}
+  maxWidth="sm"
+  fullWidth
+>
 
+  <Box sx={{ p: 3 }}>
+
+    <Typography
+      variant="h6"
+      fontWeight={700}
+      mb={3}
+    >
+      Close Internal NCR
+    </Typography>
+
+    <TextField
+      fullWidth
+      label="Closed By"
+      margin="normal"
+      value={closeForm.closed_by}
+      onChange={(e) =>
+        setCloseForm({
+          ...closeForm,
+          closed_by: e.target.value,
+        })
+      }
+    />
+
+    <TextField
+      fullWidth
+      multiline
+      rows={4}
+      margin="normal"
+      label="Root Cause Analysis"
+      value={closeForm.root_cause_analysis}
+      onChange={(e) =>
+        setCloseForm({
+          ...closeForm,
+          root_cause_analysis: e.target.value,
+        })
+      }
+    />
+
+    <TextField
+      fullWidth
+      multiline
+      rows={4}
+      margin="normal"
+      label="Corrective & Preventive Action"
+      value={closeForm.corrective_preventive_action}
+      onChange={(e) =>
+        setCloseForm({
+          ...closeForm,
+          corrective_preventive_action:
+            e.target.value,
+        })
+      }
+    />
+
+    <Box
+      mt={3}
+      display="flex"
+      justifyContent="flex-end"
+      gap={2}
+    >
+
+      <Button
+        onClick={() =>
+          setCloseDialogOpen(false)
+        }
+      >
+        Cancel
+      </Button>
+
+      <Button
+        variant="contained"
+        color="success"
+        onClick={handleCloseNCR}
+      >
+        Close NCR
+      </Button>
+
+    </Box>
+
+  </Box>
+
+</Dialog>
     </MainLayout>
   );
 }

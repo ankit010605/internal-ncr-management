@@ -73,16 +73,49 @@ def get_all_internal_ncr():
 @api.put("/ncr/<int:ncr_id>/close")
 def close_internal_ncr(ncr_id):
 
-    ncr = close_ncr(ncr_id)
+    data = request.get_json()
 
-    if not ncr:
+    # -----------------------------
+    # Validation
+    # -----------------------------
+
+    if not data.get("closed_by"):
         return jsonify({
             "success": False,
-            "message": "NCR not found."
-        }), 404
+            "message": "Closed By is required."
+        }), 400
+
+    if not data.get("root_cause_analysis"):
+        return jsonify({
+            "success": False,
+            "message": "Root Cause Analysis is required."
+        }), 400
+
+    if not data.get("corrective_preventive_action"):
+        return jsonify({
+            "success": False,
+            "message": "Corrective & Preventive Action is required."
+        }), 400
+
+    # ncr = close_ncr(
+    #     ncr_id,
+    #     data
+    # )
+    ncr = close_ncr(
+    ncr_id,
+    data
+)
+    print("=" * 50)
+    print("Returned from close_ncr():", ncr)
+    print("=" * 50)
+    if not ncr:
+      return jsonify({
+        "success": False,
+        "message": "NCR not found."
+    }), 404
 
     return jsonify({
-        "success": True,
-        "message": "NCR Closed Successfully.",
-        "data": ncr.to_dict()
-    }), 200
+      "success": True,
+      "message": "NCR Closed Successfully.",
+      "data": ncr.to_dict()
+}), 200
