@@ -1,37 +1,24 @@
 from app.api import api
-import socket
+from app.services.email.send_email import send_email
 
 
-@api.route("/test-email", methods=["GET"])
+@api.get("/test-email")
 def test_email():
-
-    print("=" * 60)
-    print("TEST EMAIL STARTED")
-    print("=" * 60)
 
     try:
 
-        print("Creating socket...")
-
-        sock = socket.create_connection(
-            ("smtp.gmail.com", 587),
-            timeout=10
+        response = send_email(
+            subject="Resend Test",
+            recipients=["goodone2627@gmail.com"],   # your email
+            body="This is a Resend test email."
         )
-
-        print("SOCKET CONNECTED SUCCESSFULLY")
-
-        sock.close()
 
         return {
             "success": True,
-            "message": "Socket connection successful"
+            "response": response
         }
 
     except Exception as e:
-
-        print("SOCKET ERROR")
-        print(type(e))
-        print(e)
 
         return {
             "success": False,
