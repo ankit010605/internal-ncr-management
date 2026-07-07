@@ -31,7 +31,7 @@ def create_app():
     from app.seed import register_seed_commands
     register_seed_commands(app)
 
-    # Register API Routes
+        # Register API Routes
     from app.api import api
     from app.api import health
     from app.api import master
@@ -39,6 +39,18 @@ def create_app():
     from app.api import ncr_details
     from app.api import reports
     from app.api import test_email
+
     app.register_blueprint(api, url_prefix="/api")
+
+    # ==========================
+    # PRINT ALL REGISTERED ROUTES
+    # ==========================
+    print("=" * 60)
+    print("REGISTERED ROUTES")
+
+    for rule in app.url_map.iter_rules():
+        print(rule)
+
+    print("=" * 60)
 
     return app
