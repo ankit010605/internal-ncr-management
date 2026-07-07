@@ -38,3 +38,4 @@ class Config:
         os.getenv("MAIL_USERNAME"),
     )
     RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+    BREVO_API_KEY = os.getenv("BREVO_API_KEY")

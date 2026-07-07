@@ -7,15 +7,19 @@ def test_email():
 
     try:
 
-        response = send_email(
-            subject="Resend Test",
-            recipients=["goodone2627@gmail.com"],   # your email
-            body="This is a Resend test email."
+        send_email(
+            subject="Brevo Test Email",
+            recipients=["snehasuman4004@gmail.com"],
+            body="This is a test email from Brevo.",
+            html="""
+            <h2>✅ Brevo is Working!</h2>
+            <p>This email was sent successfully from your Internal NCR Management System.</p>
+            """
         )
 
         return {
             "success": True,
-            "response": response
+            "message": "Email sent successfully."
         }
 
     except Exception as e:
