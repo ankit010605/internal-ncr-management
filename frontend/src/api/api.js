@@ -4,7 +4,7 @@
 //   baseURL: "http://127.0.0.1:5000/api",
 // });
 
-export default api;
+// export default api;
 import axios from "axios";
 
 const api = axios.create({
