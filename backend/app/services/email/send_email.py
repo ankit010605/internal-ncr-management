@@ -4,20 +4,23 @@ from app import mail
 
 def send_email(subject, recipients, body=None, html=None):
 
-    print("INSIDE SEND EMAIL")
+    try:
+        print("INSIDE SEND EMAIL")
 
-    # TEMPORARY
-    return
+        msg = Message(
+            subject=subject,
+            recipients=recipients
+        )
 
-    msg = Message(
-        subject=subject,
-        recipients=recipients
-    )
+        if body:
+            msg.body = body
 
-    if body:
-        msg.body = body
+        if html:
+            msg.html = html
 
-    if html:
-        msg.html = html
+        mail.send(msg)
 
-    mail.send(msg)
+        print("EMAIL SENT SUCCESSFULLY")
+
+    except Exception as e:
+        print("EMAIL ERROR:", e)
