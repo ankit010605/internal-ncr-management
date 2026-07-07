@@ -1,26 +1,34 @@
-from flask_mail import Message
-from app import mail
+import resend
+from flask import current_app
 
 
 def send_email(subject, recipients, body=None, html=None):
 
     try:
-        print("INSIDE SEND EMAIL")
 
-        msg = Message(
-            subject=subject,
-            recipients=recipients
-        )
+        resend.api_key = current_app.config["RESEND_API_KEY"]
 
-        if body:
-            msg.body = body
+        params = {
+            "from": "Internal NCR Management System <onboarding@resend.dev>",
+            "to": recipients,
+            "subject": subject,
+            "html": html if html else body
+        }
 
-        if html:
-            msg.html = html
+        response = resend.Emails.send(params)
 
-        mail.send(msg)
-
+        print("=" * 60)
         print("EMAIL SENT SUCCESSFULLY")
+        print(response)
+        print("=" * 60)
+
+        return response
 
     except Exception as e:
-        print("EMAIL ERROR:", e)
+
+        print("=" * 60)
+        print("EMAIL FAILED")
+        print(e)
+        print("=" * 60)
+
+        raise

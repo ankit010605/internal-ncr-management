@@ -1,15 +1,38 @@
-from flask_mail import Message
-from app import mail
+import resend
+from flask import current_app
 
 
 def send_ncr_email(to_email, subject, body):
 
-    msg = Message(
-        subject=subject,
-        sender="your_email@gmail.com",
-        recipients=[to_email]
-    )
+    try:
 
-    msg.body = body
+        resend.api_key = current_app.config["RESEND_API_KEY"]
 
-    mail.send(msg)
+        response = resend.Emails.send({
+
+            "from": "Internal NCR Management System <onboarding@resend.dev>",
+
+            "to": [to_email],
+
+            "subject": subject,
+
+            "text": body
+
+        })
+
+        print("=" * 60)
+        print("EMAIL SENT SUCCESSFULLY")
+        print(response)
+        print("=" * 60)
+
+        return response
+
+    except Exception as e:
+
+        print("=" * 60)
+        print("EMAIL FAILED")
+        print(type(e))
+        print(e)
+        print("=" * 60)
+
+        raise

@@ -37,3 +37,4 @@ class Config:
         "Internal NCR Management System",
         os.getenv("MAIL_USERNAME"),
     )
+    RESEND_API_KEY = os.getenv("RESEND_API_KEY")
