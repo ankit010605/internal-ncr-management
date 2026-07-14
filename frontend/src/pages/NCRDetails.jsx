@@ -14,6 +14,7 @@ import {
   Dialog,
   IconButton,
   Skeleton,
+  alpha,
 } from "@mui/material";
 
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -30,14 +31,12 @@ import { exportNCRDetailPDF } from "../utils/exportNCRDetailPDF";
 import MainLayout from "../components/layout/MainLayout";
 import SectionCard from "../components/common/SectionCard";
 
-const PRIMARY = "#D97706";
-
 const InfoField = ({ label, value }) => (
   <Grid item xs={12} sm={6} md={4}>
-    <Typography variant="caption" sx={{ color: "#9CA3AF", fontWeight: 600 }}>
+    <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 600 }}>
       {label}
     </Typography>
-    <Typography variant="body1" sx={{ color: "#1F2937", fontWeight: 500 }}>
+    <Typography variant="body1" sx={{ color: "text.primary", fontWeight: 500 }}>
       {value || "—"}
     </Typography>
   </Grid>
@@ -130,7 +129,7 @@ export default function NCRDetails() {
 
         <Box>
           <Box display="flex" alignItems="center" gap={1.5}>
-            <Typography variant="h5" sx={{ fontWeight: 700, color: "#1F2937" }}>
+            <Typography variant="h5" sx={{ fontWeight: 700, color: "text.primary" }}>
               {ncr.ncr_number}
             </Typography>
 
@@ -139,13 +138,14 @@ export default function NCRDetails() {
               size="small"
               sx={{
                 fontWeight: 600,
-                bgcolor: isOpen ? "rgba(220, 38, 38, 0.1)" : "rgba(22, 163, 74, 0.1)",
-                color: isOpen ? "#DC2626" : "#16A34A",
+                bgcolor: (theme) =>
+                  alpha(isOpen ? theme.palette.error.main : theme.palette.success.main, 0.14),
+                color: isOpen ? "error.main" : "success.main",
               }}
             />
           </Box>
 
-          <Typography variant="body2" sx={{ color: "#6B7280", mt: 0.5 }}>
+          <Typography variant="body2" sx={{ color: "text.secondary", mt: 0.5 }}>
             {ncr.plant} {ncr.bay ? `• ${ncr.bay}` : ""}
           </Typography>
         </Box>
@@ -158,9 +158,13 @@ export default function NCRDetails() {
             onClick={() => exportNCRDetailPDF(ncr)}
             sx={{
               borderRadius: "8px",
-              borderColor: "#D1D5DB",
-              color: "#4B5563",
+              borderColor: "divider",
+              color: "text.secondary",
               textTransform: "none",
+              "&:hover": {
+                borderColor: "text.secondary",
+                bgcolor: "action.hover",
+              },
             }}
           >
             Download PDF
@@ -173,9 +177,9 @@ export default function NCRDetails() {
               onClick={() => setCloseDialogOpen(true)}
               sx={{
                 borderRadius: "8px",
-                bgcolor: "#16A34A",
+                bgcolor: "success.main",
                 textTransform: "none",
-                "&:hover": { bgcolor: "#128038" },
+                "&:hover": { bgcolor: "success.dark" },
               }}
             >
               Close NCR
@@ -187,7 +191,7 @@ export default function NCRDetails() {
       </Box>
 
       {/* BASIC INFORMATION */}
-      <SectionCard title="Basic Information" icon={<InfoOutlinedIcon sx={{ color: PRIMARY }} />}>
+      <SectionCard title="Basic Information" icon={<InfoOutlinedIcon sx={{ color: "primary.main" }} />}>
         <Grid container spacing={2.5}>
           <InfoField label="Project" value={ncr.project_name} />
           <InfoField label="Drawing Number" value={ncr.drawing_number} />
@@ -199,7 +203,7 @@ export default function NCRDetails() {
       </SectionCard>
 
       {/* RESPONSIBILITY */}
-      <SectionCard title="Responsibility" icon={<AssignmentIndOutlinedIcon sx={{ color: PRIMARY }} />}>
+      <SectionCard title="Responsibility" icon={<AssignmentIndOutlinedIcon sx={{ color: "primary.main" }} />}>
         <Grid container spacing={2.5}>
           <InfoField label="Production Incharge" value={ncr.production_incharge_name || ncr.production_incharge} />
           <InfoField label="Quality Incharge" value={ncr.quality_incharge_name || ncr.quality_incharge} />
@@ -210,7 +214,7 @@ export default function NCRDetails() {
       </SectionCard>
 
       {/* DATES */}
-      <SectionCard title="Dates" icon={<EventOutlinedIcon sx={{ color: PRIMARY }} />}>
+      <SectionCard title="Dates" icon={<EventOutlinedIcon sx={{ color: "primary.main" }} />}>
         <Grid container spacing={2.5}>
           <InfoField label="Issue Date" value={ncr.issue_date} />
           <InfoField label="Target Closing Date" value={ncr.target_closing_date} />
@@ -218,32 +222,32 @@ export default function NCRDetails() {
       </SectionCard>
 
       {/* NCR DESCRIPTION / RCA / CAPA */}
-      <SectionCard title="NCR Description" icon={<DescriptionOutlinedIcon sx={{ color: PRIMARY }} />}>
-        <Typography variant="body1" sx={{ color: "#374151", whiteSpace: "pre-wrap" }}>
+      <SectionCard title="NCR Description" icon={<DescriptionOutlinedIcon sx={{ color: "primary.main" }} />}>
+        <Typography variant="body1" sx={{ color: "text.primary", whiteSpace: "pre-wrap" }}>
           {ncr.ncr_description || "—"}
         </Typography>
 
         <Divider sx={{ my: 2.5 }} />
 
-        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#1F2937", mb: 1 }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "text.primary", mb: 1 }}>
           Root Cause Analysis
         </Typography>
-        <Typography variant="body1" sx={{ color: "#374151", whiteSpace: "pre-wrap" }}>
+        <Typography variant="body1" sx={{ color: "text.primary", whiteSpace: "pre-wrap" }}>
           {ncr.root_cause_analysis || "—"}
         </Typography>
 
         <Divider sx={{ my: 2.5 }} />
 
-        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#1F2937", mb: 1 }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "text.primary", mb: 1 }}>
           Corrective & Preventive Action
         </Typography>
-        <Typography variant="body1" sx={{ color: "#374151", whiteSpace: "pre-wrap" }}>
+        <Typography variant="body1" sx={{ color: "text.primary", whiteSpace: "pre-wrap" }}>
           {ncr.corrective_preventive_action || "—"}
         </Typography>
       </SectionCard>
 
       {/* PHOTO GALLERY */}
-      <SectionCard title="Photo Gallery" icon={<ImageOutlinedIcon sx={{ color: PRIMARY }} />}>
+      <SectionCard title="Photo Gallery" icon={<ImageOutlinedIcon sx={{ color: "primary.main" }} />}>
 
         {ncr.attachments && ncr.attachments.length > 0 ? (
 
@@ -255,10 +259,11 @@ export default function NCRDetails() {
                   sx={{
                     borderRadius: "10px",
                     overflow: "hidden",
-                    border: "1px solid #E5E7EB",
+                    border: "1px solid",
+                    borderColor: "divider",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
-                    "&:hover": { boxShadow: "0 6px 16px rgba(0,0,0,0.1)" },
+                    "&:hover": { boxShadow: "0 6px 16px rgba(0,0,0,0.4)" },
                   }}
                 >
                   <img

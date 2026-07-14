@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { Box, Paper, Typography, useTheme } from "@mui/material";
-import FactoryOutlinedIcon from "@mui/icons-material/FactoryOutlined";
+import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 
 import DashboardCard from "./DashboardCard";
 import ChartTitle from "./ChartTitle";
@@ -42,7 +42,7 @@ function CustomTooltip({ active, payload }) {
         {plant}
       </Typography>
       <Typography variant="caption" color="text.secondary">
-        {numberFormatter.format(count)} NCR{count === 1 ? "" : "s"}
+        {numberFormatter.format(count)} open NCR{count === 1 ? "" : "s"}
       </Typography>
     </Paper>
   );
@@ -61,15 +61,15 @@ function EmptyState() {
         gap: 1,
       }}
     >
-      <FactoryOutlinedIcon sx={{ fontSize: 36, opacity: 0.4 }} />
+      <WarningAmberOutlinedIcon sx={{ fontSize: 36, opacity: 0.4 }} />
       <Typography variant="body2" color="text.secondary">
-        No plant-wise NCR data available
+        No open NCR data available
       </Typography>
     </Box>
   );
 }
 
-export default function PlantChart({ data }) {
+export default function OpenPlantChart({ data = [] }) {
   const theme = useTheme();
 
   const chartData = useMemo(() => {
@@ -81,7 +81,7 @@ export default function PlantChart({ data }) {
 
   return (
     <DashboardCard>
-      <ChartTitle>Plant-wise NCRs</ChartTitle>
+      <ChartTitle>Open NCRs by Plant</ChartTitle>
 
       <Box sx={{ flexGrow: 1, minHeight: 0 }}>
         {!hasData ? (
@@ -108,7 +108,7 @@ export default function PlantChart({ data }) {
                 axisLine={{ stroke: theme.palette.divider }}
                 tickLine={false}
                 label={{
-                  value: "Number of NCRs",
+                  value: "Number of Open NCRs",
                   position: "insideBottom",
                   offset: -4,
                   fontSize: 11,
@@ -133,13 +133,13 @@ export default function PlantChart({ data }) {
 
               <Bar
                 dataKey="count"
-                fill={theme.palette.primary.main}
+                fill={theme.palette.warning.main}
                 radius={[0, 6, 6, 0]}
                 maxBarSize={28}
                 isAnimationActive
                 animationDuration={500}
                 animationEasing="ease-out"
-                activeBar={{ fill: theme.palette.primary.dark }}
+                activeBar={{ fill: theme.palette.warning.dark }}
               />
             </BarChart>
           </ResponsiveContainer>

@@ -29,6 +29,8 @@ def create_app():
     from app.api import ncr_details
     from app.api import reports
     from app.api import test_email
+    from app.api import reports
+    from app.api import dashboard
 
     app.register_blueprint(api, url_prefix="/api")
 

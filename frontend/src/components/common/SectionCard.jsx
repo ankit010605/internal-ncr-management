@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Divider, Box } from "@mui/material";
+import { Card, CardContent, Typography, Divider, Box, alpha } from "@mui/material";
 
 export default function SectionCard({ title, icon, children }) {
   return (
@@ -7,8 +7,10 @@ export default function SectionCard({ title, icon, children }) {
       sx={{
         mb: 3,
         borderRadius: "12px",
-        border: "1px solid #E5E7EB",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+        border: "1px solid",
+        borderColor: "divider",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+        bgcolor: "background.paper",
       }}
     >
 
@@ -22,7 +24,7 @@ export default function SectionCard({ title, icon, children }) {
                 width: 36,
                 height: 36,
                 borderRadius: "10px",
-                bgcolor: "rgba(217, 119, 6, 0.1)",
+                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.12),
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -33,7 +35,7 @@ export default function SectionCard({ title, icon, children }) {
             </Box>
           )}
 
-          <Typography variant="h6" sx={{ fontWeight: 700, color: "#1F2937" }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, color: "text.primary" }}>
             {title}
           </Typography>
 

@@ -26,8 +26,15 @@ import FactoryIcon from "@mui/icons-material/Factory";
 
 const drawerWidth = 260;
 
-const PRIMARY = "#D97706";
-const BACKGROUND = "#F5F7FA";
+// Dark, industrial-analytics palette. Centralized here so the whole
+// shell (sidebar, app bar, dividers, text) stays visually consistent.
+const PRIMARY = "#3B82F6";
+const BACKGROUND = "#0B1220";
+const SURFACE = "#0F1A2E";
+const BORDER = "rgba(255, 255, 255, 0.08)";
+const TEXT_PRIMARY = "#F1F5F9";
+const TEXT_SECONDARY = "#94A3B8";
+const TEXT_MUTED = "#64748B";
 
 const navItems = [
   { label: "Dashboard", to: "/", icon: <DashboardIcon /> },
@@ -56,7 +63,7 @@ export default function MainLayout({ children }) {
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        bgcolor: "#FFFFFF",
+        bgcolor: SURFACE,
       }}
     >
 
@@ -87,13 +94,13 @@ export default function MainLayout({ children }) {
         <Box>
           <Typography
             variant="subtitle1"
-            sx={{ fontWeight: 700, lineHeight: 1.2, color: "#1F2937" }}
+            sx={{ fontWeight: 700, lineHeight: 1.2, color: TEXT_PRIMARY }}
           >
             NCR System
           </Typography>
           <Typography
             variant="caption"
-            sx={{ color: "#9CA3AF" }}
+            sx={{ color: TEXT_MUTED }}
           >
             Quality Management
           </Typography>
@@ -101,9 +108,23 @@ export default function MainLayout({ children }) {
 
       </Box>
 
-      <Divider />
+      <Divider sx={{ borderColor: BORDER }} />
 
-      <List sx={{ px: 1.5, py: 2, flexGrow: 1 }}>
+      <Box sx={{ px: 3, pt: 2.5, pb: 1 }}>
+        <Typography
+          variant="caption"
+          sx={{
+            color: TEXT_MUTED,
+            fontWeight: 700,
+            letterSpacing: 1,
+            fontSize: "0.68rem",
+          }}
+        >
+          NAVIGATION
+        </Typography>
+      </Box>
+
+      <List sx={{ px: 1.5, pb: 2, flexGrow: 1 }}>
 
         {navItems.map((item) => {
 
@@ -121,16 +142,13 @@ export default function MainLayout({ children }) {
                 mb: 0.5,
                 px: 2,
                 py: 1.1,
-                color: selected ? PRIMARY : "#4B5563",
-                bgcolor: selected ? "rgba(217, 119, 6, 0.1)" : "transparent",
-                borderLeft: selected
-                  ? `3px solid ${PRIMARY}`
-                  : "3px solid transparent",
+                color: selected ? "#FFFFFF" : TEXT_SECONDARY,
+                bgcolor: selected ? PRIMARY : "transparent",
                 transition: "all 0.2s ease",
                 "&:hover": {
                   bgcolor: selected
-                    ? "rgba(217, 119, 6, 0.14)"
-                    : "rgba(0, 0, 0, 0.04)",
+                    ? PRIMARY
+                    : "rgba(255, 255, 255, 0.06)",
                 },
               }}
             >
@@ -138,7 +156,7 @@ export default function MainLayout({ children }) {
               <ListItemIcon
                 sx={{
                   minWidth: 38,
-                  color: selected ? PRIMARY : "#9CA3AF",
+                  color: selected ? "#FFFFFF" : TEXT_MUTED,
                 }}
               >
                 {item.icon}
@@ -160,7 +178,7 @@ export default function MainLayout({ children }) {
 
       </List>
 
-      <Divider />
+      <Divider sx={{ borderColor: BORDER }} />
 
       <Box
         sx={{
@@ -177,10 +195,10 @@ export default function MainLayout({ children }) {
         </Avatar>
 
         <Box>
-          <Typography variant="body2" sx={{ fontWeight: 600, color: "#1F2937" }}>
+          <Typography variant="body2" sx={{ fontWeight: 600, color: TEXT_PRIMARY }}>
             Quality Team
           </Typography>
-          <Typography variant="caption" sx={{ color: "#9CA3AF" }}>
+          <Typography variant="caption" sx={{ color: TEXT_MUTED }}>
             SSD Plant
           </Typography>
         </Box>
@@ -200,13 +218,13 @@ export default function MainLayout({ children }) {
         elevation={0}
         sx={{
           zIndex: 1201,
-          bgcolor: "#FFFFFF",
-          color: "#1F2937",
-          borderBottom: "1px solid #E5E7EB",
+          bgcolor: SURFACE,
+          color: TEXT_PRIMARY,
+          borderBottom: `1px solid ${BORDER}`,
         }}
       >
 
-        <Toolbar>
+        <Toolbar sx={{ py: 1 }}>
 
           <IconButton
             edge="start"
@@ -214,18 +232,26 @@ export default function MainLayout({ children }) {
             sx={{
               mr: 2,
               display: { xs: "inline-flex", md: "none" },
-              color: "#1F2937",
+              color: TEXT_PRIMARY,
             }}
           >
             <MenuIcon />
           </IconButton>
 
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: 700, color: "#1F2937" }}
-          >
-            Internal NCR Management System
-          </Typography>
+          <Box>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 700, color: TEXT_PRIMARY, lineHeight: 1.3 }}
+            >
+              Internal NCR Management System
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{ color: TEXT_MUTED, letterSpacing: 0.2 }}
+            >
+              Quality Department Overview
+            </Typography>
+          </Box>
 
         </Toolbar>
 
@@ -246,6 +272,7 @@ export default function MainLayout({ children }) {
             "& .MuiDrawer-paper": {
               width: drawerWidth,
               boxSizing: "border-box",
+              bgcolor: SURFACE,
             },
           }}
         >
@@ -259,8 +286,9 @@ export default function MainLayout({ children }) {
             "& .MuiDrawer-paper": {
               width: drawerWidth,
               boxSizing: "border-box",
-              mt: 8,
-              borderRight: "1px solid #E5E7EB",
+              mt: 9,
+              borderRight: `1px solid ${BORDER}`,
+              bgcolor: SURFACE,
             },
           }}
           open
@@ -275,7 +303,7 @@ export default function MainLayout({ children }) {
         sx={{
           flexGrow: 1,
           p: { xs: 2, sm: 3 },
-          mt: 8,
+          mt: 9,
           width: { md: `calc(100% - ${drawerWidth}px)` },
         }}
       >

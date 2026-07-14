@@ -1,144 +1,333 @@
-import { useEffect, useState } from "react";
-import { Grid, Paper, Typography, Box, Skeleton } from "@mui/material";
-import AssessmentIcon from "@mui/icons-material/Assessment";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useEffect, useState, useCallback } from "react";
+import {
+  Box,
+  Grid,
+  Typography,
+  Skeleton,
+  Paper,
+  IconButton,
+  Tooltip,
+  Fade,
+  Button,
+  Stack,
+} from "@mui/material";
+import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
+import FactoryRoundedIcon from "@mui/icons-material/FactoryRounded";
+import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+
 import api from "../api/api";
 import MainLayout from "../components/layout/MainLayout";
 
-const COLORS = {
-  info: "#2563EB",
-  danger: "#DC2626",
-  success: "#16A34A",
-};
+import SummaryCards from "../components/dashboard/SummaryCards";
+import PlantChart from "../components/dashboard/PlantChart";
+import WeeklyComparison from "../components/dashboard/WeeklyComparison";
+import WeeklyTrend from "../components/dashboard/WeeklyTrend";
+import ContractorChart from "../components/dashboard/ContractorChart";
+import OpenPlantChart from "../components/dashboard/OpenPlantChart";
 
-export default function Dashboard() {
-  const [stats, setStats] = useState({
-    total: 0,
-    open: 0,
-    closed: 0,
-  });
+// Fixed heights keep chart cards visually aligned across a row,
+// regardless of how much data each chart renders.
+const CHART_CARD_HEIGHT = 420;
 
-  const [loading, setLoading] = useState(true);
+function DashboardSkeleton() {
+  return (
+    <Box>
+      {/* KPI row skeleton */}
+      <Grid container spacing={3} mb={1}>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Grid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 2.5,
+                borderRadius: 3,
+                height: 120,
+                bgcolor: "background.paper",
+                border: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Skeleton variant="text" width="60%" height={20} />
+              <Skeleton variant="text" width="40%" height={40} sx={{ mt: 1 }} />
+              <Skeleton variant="text" width="50%" height={16} sx={{ mt: 1 }} />
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
 
-  useEffect(() => {
-    loadDashboard();
-  }, []);
+      {/* Chart grid skeleton */}
+      <Grid container spacing={3} mt={1}>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Grid key={i} size={{ xs: 12, md: 6 }}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 2.5,
+                borderRadius: 3,
+                height: CHART_CARD_HEIGHT,
+                bgcolor: "background.paper",
+                border: "1px solid",
+                borderColor: "divider",
+              }}
+            >
+              <Skeleton variant="text" width="35%" height={28} sx={{ mb: 2 }} />
+              <Skeleton
+                variant="rounded"
+                width="100%"
+                height={CHART_CARD_HEIGHT - 80}
+              />
+            </Paper>
+          </Grid>
+        ))}
+        <Grid size={{ xs: 12 }}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              height: CHART_CARD_HEIGHT,
+              bgcolor: "background.paper",
+              border: "1px solid",
+              borderColor: "divider",
+            }}
+          >
+            <Skeleton variant="text" width="25%" height={28} sx={{ mb: 2 }} />
+            <Skeleton
+              variant="rounded"
+              width="100%"
+              height={CHART_CARD_HEIGHT - 80}
+            />
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
 
-  const loadDashboard = async () => {
-    try {
-      setLoading(true);
-
-      const res = await api.get("/ncr");
-
-      const ncrs = res.data.data;
-
-      setStats({
-        total: ncrs.length,
-        open: ncrs.filter((n) => n.status === "Open").length,
-        closed: ncrs.filter((n) => n.status === "Closed").length,
-      });
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const Card = ({ title, value, icon, color }) => (
+function DashboardError({ onRetry }) {
+  return (
     <Paper
       elevation={0}
       sx={{
-        p: 3,
-        borderRadius: "12px",
-        border: "1px solid #E5E7EB",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+        borderRadius: 3,
+        py: 8,
+        px: 4,
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        gap: 2.5,
-        transition: "all 0.2s ease",
-        "&:hover": {
-          boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
-          transform: "translateY(-2px)",
-        },
+        justifyContent: "center",
+        textAlign: "center",
+        gap: 1.5,
+        bgcolor: "background.paper",
+        border: "1px solid",
+        borderColor: "divider",
       }}
     >
-      <Box
-        sx={{
-          width: 56,
-          height: 56,
-          borderRadius: "12px",
-          bgcolor: `${color}1A`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
+      <ErrorOutlineRoundedIcon sx={{ fontSize: 48, color: "error.main" }} />
+      <Typography variant="h6" fontWeight={700}>
+        Failed to load dashboard
+      </Typography>
+      <Typography color="text.secondary" sx={{ maxWidth: 380 }}>
+        There was a problem retrieving the latest NCR data. Please check your
+        connection and try again.
+      </Typography>
+      <Button
+        variant="contained"
+        disableElevation
+        startIcon={<RefreshRoundedIcon />}
+        onClick={onRetry}
+        sx={{ mt: 1, textTransform: "none", fontWeight: 600, borderRadius: 2 }}
       >
-        {icon}
-      </Box>
-
-      <Box>
-        <Typography
-          variant="body2"
-          sx={{ color: "#6B7280", fontWeight: 500, mb: 0.5 }}
-        >
-          {title}
-        </Typography>
-
-        {loading ? (
-          <Skeleton variant="text" width={50} height={38} />
-        ) : (
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 700, color: "#1F2937", lineHeight: 1 }}
-          >
-            {value}
-          </Typography>
-        )}
-      </Box>
+        Retry
+      </Button>
     </Paper>
   );
+}
+
+export default function Dashboard() {
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
+
+  const loadDashboard = useCallback(async (isRefresh = false) => {
+    try {
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+
+      const res = await api.get("/dashboard");
+
+      setDashboard(res.data.data);
+      setLastUpdated(new Date());
+    } catch (err) {
+      console.error(err);
+      if (!isRefresh) {
+        setDashboard(null);
+      }
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadDashboard();
+  }, [loadDashboard]);
 
   return (
     <MainLayout>
-      <Box mb={3}>
-        <Typography variant="h5" sx={{ fontWeight: 700, color: "#1F2937" }}>
-          Dashboard
-        </Typography>
-        <Typography variant="body2" sx={{ color: "#6B7280", mt: 0.5 }}>
-          Overview of Non-Conformance Reports across the plant
-        </Typography>
+      <Box>
+        {/* Page Heading */}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          spacing={2}
+          mb={4}
+        >
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Box
+              sx={{
+                width: 48,
+                height: 48,
+                borderRadius: 2.5,
+                bgcolor: "primary.main",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <FactoryRoundedIcon sx={{ color: "common.white", fontSize: 26 }} />
+            </Box>
+            <Box>
+              <Typography
+                variant="h4"
+                fontWeight={800}
+                lineHeight={1.2}
+                color="text.primary"
+              >
+                Dashboard
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mt: 0.5, letterSpacing: 0.2 }}
+              >
+                Internal NCR Management System — Quality Overview
+              </Typography>
+            </Box>
+          </Stack>
+
+          {!loading && dashboard && (
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              {lastUpdated && (
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ textTransform: "uppercase", letterSpacing: 0.5 }}
+                >
+                  Updated{" "}
+                  {lastUpdated.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Typography>
+              )}
+              <Tooltip title="Refresh data">
+                <span>
+                  <IconButton
+                    onClick={() => loadDashboard(true)}
+                    disabled={refreshing}
+                    size="small"
+                    sx={{
+                      bgcolor: "background.paper",
+                      border: "1px solid",
+                      borderColor: "divider",
+                      color: "text.secondary",
+                      "&:hover": {
+                        bgcolor: "action.hover",
+                        color: "text.primary",
+                      },
+                    }}
+                  >
+                    <RefreshRoundedIcon
+                      fontSize="small"
+                      sx={{
+                        animation: refreshing
+                          ? "spin 0.8s linear infinite"
+                          : "none",
+                        "@keyframes spin": {
+                          "0%": { transform: "rotate(0deg)" },
+                          "100%": { transform: "rotate(360deg)" },
+                        },
+                      }}
+                    />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </Stack>
+          )}
+        </Stack>
+
+        {/* Loading State */}
+        {loading && <DashboardSkeleton />}
+
+        {/* Error State */}
+        {!loading && !dashboard && (
+          <DashboardError onRetry={() => loadDashboard()} />
+        )}
+
+        {/* Content */}
+        {!loading && dashboard && (
+          <Fade in timeout={400}>
+            <Box>
+              {/* Summary Cards */}
+              <SummaryCards dashboard={dashboard} />
+
+              <Grid container spacing={3} mt={0.5} alignItems="stretch">
+                {/* Plant-wise NCR */}
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box sx={{ height: CHART_CARD_HEIGHT }}>
+                    <PlantChart data={dashboard.plant_wise} />
+                  </Box>
+                </Grid>
+
+                {/* Open NCR by Plant */}
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box sx={{ height: CHART_CARD_HEIGHT }}>
+                    <OpenPlantChart data={dashboard.open_by_plant} />
+                  </Box>
+                </Grid>
+
+                {/* Weekly Trend */}
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box sx={{ height: CHART_CARD_HEIGHT }}>
+                    <WeeklyTrend data={dashboard.weekly_trend} />
+                  </Box>
+                </Grid>
+
+                {/* Weekly Comparison */}
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <Box sx={{ height: CHART_CARD_HEIGHT }}>
+                    <WeeklyComparison dashboard={dashboard} />
+                  </Box>
+                </Grid>
+
+                {/* Contractor-wise NCR */}
+                <Grid size={{ xs: 12 }}>
+                  <Box sx={{ height: CHART_CARD_HEIGHT }}>
+                    <ContractorChart data={dashboard.contractor_wise} />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+          </Fade>
+        )}
       </Box>
-
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card
-            title="Total NCR"
-            value={stats.total}
-            icon={<AssessmentIcon sx={{ color: COLORS.info, fontSize: 28 }} />}
-            color={COLORS.info}
-          />
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Card
-            title="Open NCR"
-            value={stats.open}
-            icon={<WarningAmberIcon sx={{ color: COLORS.danger, fontSize: 28 }} />}
-            color={COLORS.danger}
-          />
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Card
-            title="Closed NCR"
-            value={stats.closed}
-            icon={<CheckCircleIcon sx={{ color: COLORS.success, fontSize: 28 }} />}
-            color={COLORS.success}
-          />
-        </Grid>
-      </Grid>
     </MainLayout>
   );
 }

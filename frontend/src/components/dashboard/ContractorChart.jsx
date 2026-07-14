@@ -9,14 +9,14 @@ import {
   Tooltip,
 } from "recharts";
 import { Box, Paper, Typography, useTheme } from "@mui/material";
-import FactoryOutlinedIcon from "@mui/icons-material/FactoryOutlined";
+import EngineeringOutlinedIcon from "@mui/icons-material/EngineeringOutlined";
 
 import DashboardCard from "./DashboardCard";
 import ChartTitle from "./ChartTitle";
 
 const numberFormatter = new Intl.NumberFormat("en-IN");
 
-function truncateLabel(label = "", max = 16) {
+function truncateLabel(label = "", max = 14) {
   if (label.length <= max) return label;
   return `${label.slice(0, max - 1)}…`;
 }
@@ -24,7 +24,7 @@ function truncateLabel(label = "", max = 16) {
 function CustomTooltip({ active, payload }) {
   if (!active || !payload || !payload.length) return null;
 
-  const { plant, count } = payload[0].payload;
+  const { contractor, count } = payload[0].payload;
 
   return (
     <Paper
@@ -39,7 +39,7 @@ function CustomTooltip({ active, payload }) {
       }}
     >
       <Typography variant="caption" fontWeight={700} sx={{ display: "block" }}>
-        {plant}
+        {contractor}
       </Typography>
       <Typography variant="caption" color="text.secondary">
         {numberFormatter.format(count)} NCR{count === 1 ? "" : "s"}
@@ -61,15 +61,15 @@ function EmptyState() {
         gap: 1,
       }}
     >
-      <FactoryOutlinedIcon sx={{ fontSize: 36, opacity: 0.4 }} />
+      <EngineeringOutlinedIcon sx={{ fontSize: 36, opacity: 0.4 }} />
       <Typography variant="body2" color="text.secondary">
-        No plant-wise NCR data available
+        No contractor NCR data available
       </Typography>
     </Box>
   );
 }
 
-export default function PlantChart({ data }) {
+export default function ContractorChart({ data }) {
   const theme = useTheme();
 
   const chartData = useMemo(() => {
@@ -80,8 +80,14 @@ export default function PlantChart({ data }) {
   const hasData = chartData.length > 0;
 
   return (
-    <DashboardCard>
-      <ChartTitle>Plant-wise NCRs</ChartTitle>
+    <DashboardCard
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <ChartTitle>Contractor-wise NCRs</ChartTitle>
 
       <Box sx={{ flexGrow: 1, minHeight: 0 }}>
         {!hasData ? (
@@ -118,8 +124,8 @@ export default function PlantChart({ data }) {
 
               <YAxis
                 type="category"
-                dataKey="plant"
-                width={110}
+                dataKey="contractor"
+                width={120}
                 tickFormatter={(v) => truncateLabel(v)}
                 tick={{ fontSize: 12, fill: theme.palette.text.primary }}
                 axisLine={{ stroke: theme.palette.divider }}
@@ -133,13 +139,15 @@ export default function PlantChart({ data }) {
 
               <Bar
                 dataKey="count"
-                fill={theme.palette.primary.main}
+                fill={theme.palette.secondary.main}
                 radius={[0, 6, 6, 0]}
                 maxBarSize={28}
                 isAnimationActive
                 animationDuration={500}
                 animationEasing="ease-out"
-                activeBar={{ fill: theme.palette.primary.dark }}
+                activeBar={{
+                  fill: theme.palette.secondary.dark,
+                }}
               />
             </BarChart>
           </ResponsiveContainer>
