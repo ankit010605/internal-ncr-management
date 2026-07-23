@@ -115,10 +115,10 @@ export default function NCRList() {
       >
 
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 700, color: "#1F2937" }}>
+          <Typography variant="h5" sx={{ fontWeight: 12000, color: "#FFFFFF" }}>
             Internal NCR List
           </Typography>
-          <Typography variant="body2" sx={{ color: "#6B7280", mt: 0.5 }}>
+          <Typography variant="body2" sx={{ color: "#FFFFFF", mt: 1.0 }}>
             {ncrs.length} total records
           </Typography>
         </Box>

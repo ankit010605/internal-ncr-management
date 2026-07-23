@@ -48,6 +48,11 @@ def close_ncr(ncr_id, data):
 
     if ncr.responsible_email:
         recipients.append(ncr.responsible_email)
+    if ncr.initiator_email:
+        recipients.append(ncr.initiator_email)
+
+# Remove duplicate emails
+  
 
     recipients = list(set(recipients))
 

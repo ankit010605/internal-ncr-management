@@ -15,6 +15,10 @@ const getBase64FromUrl = async (url) => {
     reader.readAsDataURL(blob);
   });
 };
+const formatDate = (date) => {
+  if (!date) return "-";
+  return new Date(date).toLocaleDateString("en-GB");
+};
 
 export const exportNCRDetailPDF = async (ncr) => {
 
@@ -123,16 +127,28 @@ export const exportNCRDetailPDF = async (ncr) => {
   const fields = [
     ["NCR Number", ncr.ncr_number],
     ["Project", ncr.project_name],
-    ["Drawing", ncr.drawing_number],
+    ["Drawing Number", ncr.drawing_number],
+  
+    ["MAK Number", ncr.mak_number],
+    ["Quantity (Tons)", ncr.quantity],
+    ["Department", ncr.department],
+  
     ["Plant", ncr.plant],
     ["Bay", ncr.bay],
     ["Stage", ncr.stage],
+  
     ["Status", ncr.status],
-    ["Issue Date", ncr.issue_date],
-    ["Target Closing", ncr.target_closing_date],
+    ["Issue Date", formatDate(ncr.issue_date)],
+// ["Target Closing", formatDate(ncr.target_closing_date)],
+  
     ["Initiator", ncr.initiator_name],
-    ["Responsible", ncr.responsible_person],
+    ["Initiator Email", ncr.initiator_email],
+    ["Responsible Person", ncr.responsible_person],
+  
+    ["Responsible Email", ncr.responsible_email],
     ["Contractor", ncr.contractor],
+    ["Closed By", ncr.closed_by || "-"],
+    // ["Closed Date", formatDate(ncr.closed_date)],
   ];
 
   const gridCols = 3;
@@ -233,10 +249,9 @@ export const exportNCRDetailPDF = async (ncr) => {
 
   const sigLabels = [
     ["Initiator", ncr.initiator_name],
-    ["Responsible Person For Closing", ncr.responsible_person],
+    ["Closed By", ncr.closed_by || "-"],
     ["Contractor", ncr.contractor],
   ];
-
   sigLabels.forEach(([label, value], idx) => {
     const x = marginX + idx * sigWidth;
 

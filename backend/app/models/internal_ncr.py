@@ -29,6 +29,21 @@ class InternalNCR(db.Model):
         nullable=True
     )
 
+    mak_number = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    quantity = db.Column(
+        db.Integer,
+        nullable=True
+    )
+
+    department = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
     contractor = db.Column(
         db.String(200),
         nullable=True
@@ -72,6 +87,11 @@ class InternalNCR(db.Model):
 
     # Responsibility
     initiator_name = db.Column(
+        db.String(150),
+        nullable=True
+    )
+
+    initiator_email = db.Column(
         db.String(150),
         nullable=True
     )
@@ -124,7 +144,8 @@ class InternalNCR(db.Model):
         nullable=False,
         default=STATUS_OPEN
     )
-        # Closure Details
+
+    # Closure Details
     closed_by = db.Column(
         db.String(150),
         nullable=True
@@ -134,6 +155,7 @@ class InternalNCR(db.Model):
         db.DateTime,
         nullable=True
     )
+
     # Soft Delete
     is_active = db.Column(
         db.Boolean,
@@ -172,6 +194,9 @@ class InternalNCR(db.Model):
             "ncr_number": self.ncr_number,
             "project_name": self.project_name,
             "drawing_number": self.drawing_number,
+            "mak_number": self.mak_number,
+            "quantity": self.quantity,
+            "department": self.department,
             "contractor": self.contractor,
             "plant": self.plant,
             "bay": self.bay,
@@ -181,6 +206,7 @@ class InternalNCR(db.Model):
             "quality_incharge_name": self.quality_incharge_name,
             "quality_incharge_email": self.quality_incharge_email,
             "initiator_name": self.initiator_name,
+            "initiator_email": self.initiator_email,
             "closing_responsibility": self.closing_responsibility,
             "responsible_person": self.responsible_person,
             "responsible_email": self.responsible_email,
@@ -196,10 +222,10 @@ class InternalNCR(db.Model):
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
             "attachments": [
-    {
-        "id": attachment.id,
-        "image_url": attachment.image_url
-    }
-    for attachment in self.attachments
-]
+                {
+                    "id": attachment.id,
+                    "image_url": attachment.image_url
+                }
+                for attachment in self.attachments
+            ]
         }

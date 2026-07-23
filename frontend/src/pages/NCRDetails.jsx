@@ -37,7 +37,7 @@ const InfoField = ({ label, value }) => (
       {label}
     </Typography>
     <Typography variant="body1" sx={{ color: "text.primary", fontWeight: 500 }}>
-      {value || "—"}
+      {value ?? "—"}
     </Typography>
   </Grid>
 );
@@ -193,12 +193,23 @@ export default function NCRDetails() {
       {/* BASIC INFORMATION */}
       <SectionCard title="Basic Information" icon={<InfoOutlinedIcon sx={{ color: "primary.main" }} />}>
         <Grid container spacing={2.5}>
-          <InfoField label="Project" value={ncr.project_name} />
-          <InfoField label="Drawing Number" value={ncr.drawing_number} />
-          <InfoField label="Plant" value={ncr.plant} />
-          <InfoField label="Bay" value={ncr.bay} />
-          <InfoField label="Stage" value={ncr.stage} />
-          <InfoField label="Contractor" value={ncr.contractor} />
+        <InfoField label="Project" value={ncr.project_name} />
+
+<InfoField label="Drawing Number" value={ncr.drawing_number} />
+
+<InfoField label="MAK Number" value={ncr.mak_number} />
+
+<InfoField label="Quantity" value={ncr.quantity} />
+
+<InfoField label="Department" value={ncr.department} />
+
+<InfoField label="Plant" value={ncr.plant} />
+
+<InfoField label="Bay" value={ncr.bay} />
+
+<InfoField label="Stage" value={ncr.stage} />
+
+<InfoField label="Contractor" value={ncr.contractor} />
         </Grid>
       </SectionCard>
 
@@ -208,8 +219,12 @@ export default function NCRDetails() {
           <InfoField label="Production Incharge" value={ncr.production_incharge_name || ncr.production_incharge} />
           <InfoField label="Quality Incharge" value={ncr.quality_incharge_name || ncr.quality_incharge} />
           <InfoField label="Initiator" value={ncr.initiator_name} />
-          <InfoField label="Responsible Person" value={ncr.responsible_person} />
-          <InfoField label="Responsible Email" value={ncr.responsible_email} />
+
+<InfoField label="Initiator Email" value={ncr.initiator_email} />
+
+<InfoField label="Responsible Person" value={ncr.responsible_person} />
+
+<InfoField label="Responsible Email" value={ncr.responsible_email} />
         </Grid>
       </SectionCard>
 
@@ -217,7 +232,7 @@ export default function NCRDetails() {
       <SectionCard title="Dates" icon={<EventOutlinedIcon sx={{ color: "primary.main" }} />}>
         <Grid container spacing={2.5}>
           <InfoField label="Issue Date" value={ncr.issue_date} />
-          <InfoField label="Target Closing Date" value={ncr.target_closing_date} />
+          {/* <InfoField label="Target Closing Date" value={ncr.target_closing_date} /> */}
         </Grid>
       </SectionCard>
 

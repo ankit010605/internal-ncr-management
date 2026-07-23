@@ -31,6 +31,9 @@ const PRIMARY = "#D97706";
 const getInitialForm = () => ({
   project_name: "",
   drawing_number: "",
+  mak_number: "",
+  quantity: "",
+  department: "",
   plant: "",
   bay: "",
   stage: "",
@@ -40,6 +43,8 @@ const getInitialForm = () => ({
   quality_incharge: "",
 
   initiator_name: "",
+  initiator_email: "",
+
   responsible_person: "",
   responsible_email: "",
 
@@ -267,10 +272,10 @@ export default function NCRForm() {
     <MainLayout>
 
       <Box mb={3}>
-        <Typography variant="h5" sx={{ fontWeight: 700, color: "#1F2937" }}>
+        <Typography variant="h5" sx={{ fontWeight: 900, color: "#FFFFFF" }}>
           Internal NCR Creation
         </Typography>
-        <Typography variant="body2" sx={{ color: "#6B7280", mt: 0.5 }}>
+        <Typography variant="body2" sx={{ color: "#FFFFFF", mt: 0.5 }}>
           Fill in the details below to raise a new Non-Conformance Report
         </Typography>
       </Box>
@@ -300,6 +305,37 @@ export default function NCRForm() {
               onChange={handleChange}
             />
           </Grid>
+          <Grid item xs={12} md={6}>
+  <TextField
+    fullWidth
+    label="MAK Number"
+    name="mak_number"
+    value={form.mak_number}
+    onChange={handleChange}
+    placeholder="Enter MAK Number"
+  />
+</Grid>
+<Grid item xs={12} md={6}>
+  <TextField
+    fullWidth
+    type="number"
+    label="Quantity"
+    name="quantity"
+    value={form.quantity}
+    onChange={handleChange}
+    placeholder="Enter Quantity"
+  />
+</Grid>
+<Grid item xs={12} md={6}>
+  <TextField
+    fullWidth
+    label="Department"
+    name="department"
+    value={form.department}
+    onChange={handleChange}
+    placeholder="Production / Welding / QAQC"
+  />
+</Grid>
 
           <Grid item xs={12} md={6}>
             <TextField
@@ -407,6 +443,17 @@ export default function NCRForm() {
               onChange={handleChange}
             />
           </Grid>
+          <Grid item xs={12} md={6}>
+  <TextField
+    fullWidth
+    type="email"
+    label="Initiator Email"
+    name="initiator_email"
+    value={form.initiator_email}
+    placeholder="initiator@company.com"
+    onChange={handleChange}
+  />
+</Grid>
 
           {/* Responsible Person */}
           <Grid item xs={12} md={6}>

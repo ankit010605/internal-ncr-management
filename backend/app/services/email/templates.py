@@ -134,6 +134,20 @@ font-size:15px;
 <td style="padding:12px;border:1px solid #ddd;"><b>Drawing Number</b></td>
 <td style="padding:12px;border:1px solid #ddd;">{ncr.drawing_number or "-"}</td>
 </tr>
+<tr>
+<td style="padding:12px;border:1px solid #ddd;"><b>MAK Number</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.mak_number or "-"}</td>
+</tr>
+
+<tr style="background:#f9fafb;">
+<td style="padding:12px;border:1px solid #ddd;"><b>Quantity</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.quantity or "-"}</td>
+</tr>
+
+<tr>
+<td style="padding:12px;border:1px solid #ddd;"><b>Department</b></td>
+<td style="padding:12px;border:1px solid #ddd;">{ncr.department or "-"}</td>
+</tr>
 
 <tr>
 <td style="padding:12px;border:1px solid #ddd;"><b>Plant</b></td>
@@ -162,7 +176,16 @@ font-size:15px;
 
 <tr style="background:#f9fafb;">
 <td style="padding:12px;border:1px solid #ddd;"><b>Raised By</b></td>
-<td style="padding:12px;border:1px solid #ddd;">{ncr.initiator_name}</td>
+<td style="padding:12px;border:1px solid #ddd;">
+{ncr.initiator_name or "-"}
+</td>
+</tr>
+
+<tr>
+<td style="padding:12px;border:1px solid #ddd;"><b>Initiator Email</b></td>
+<td style="padding:12px;border:1px solid #ddd;">
+{ncr.initiator_email or "-"}
+</td>
 </tr>
 
 <tr>
@@ -363,6 +386,20 @@ This Internal NCR has been successfully closed.
 <td><b>Drawing Number</b></td>
 <td>{ncr.drawing_number or "-"}</td>
 </tr>
+<tr>
+<td><b>MAK Number</b></td>
+<td>{ncr.mak_number or "-"}</td>
+</tr>
+
+<tr>
+<td><b>Quantity</b></td>
+<td>{ncr.quantity or "-"}</td>
+</tr>
+
+<tr>
+<td><b>Department</b></td>
+<td>{ncr.department or "-"}</td>
+</tr>
 
 <tr>
 <td><b>Plant</b></td>
@@ -386,7 +423,12 @@ This Internal NCR has been successfully closed.
 
 <tr>
 <td><b>Raised By</b></td>
-<td>{ncr.initiator_name}</td>
+<td>{ncr.initiator_name or "-"}</td>
+</tr>
+
+<tr>
+<td><b>Initiator Email</b></td>
+<td>{ncr.initiator_email or "-"}</td>
 </tr>
 
 <tr>

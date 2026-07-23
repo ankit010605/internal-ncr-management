@@ -25,6 +25,11 @@ def create_ncr(data, files):
         project_name=data["project_name"],
 
         drawing_number=data.get("drawing_number"),
+        mak_number=data.get("mak_number"),
+
+        quantity=int(data["quantity"]) if data.get("quantity") else None,
+ 
+        department=data.get("department"),
 
         contractor=data.get("contractor"),
 
@@ -43,7 +48,7 @@ def create_ncr(data, files):
         quality_incharge_email=plant.quality_incharge_email if plant else None,
 
         initiator_name=data.get("initiator_name"),
-
+        initiator_email=data.get("initiator_email"),
         closing_responsibility=data.get("closing_responsibility"),
 
         responsible_person=data.get("responsible_person"),
@@ -111,6 +116,8 @@ def create_ncr(data, files):
 
     if ncr.responsible_email:
         recipients.append(ncr.responsible_email)
+    if ncr.initiator_email:
+        recipients.append(ncr.initiator_email)    
 
     # Remove duplicate emails
 
@@ -140,6 +147,15 @@ A new Internal NCR has been raised.
 NCR Number : {ncr.ncr_number}
 
 Project : {ncr.project_name}
+
+
+MAK No : {ncr.mak_number}
+
+Department : {ncr.department}
+
+Quantity : {ncr.quantity}
+
+Plant : {ncr.plant}
 
 Please view this email in HTML format for complete NCR details.
 """
